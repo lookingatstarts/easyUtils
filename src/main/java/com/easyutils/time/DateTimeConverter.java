@@ -36,7 +36,7 @@ import java.util.TimeZone;
  * Calendar可以设置时区和时间戳
  * <p>
  * 5、夏令时
- * 使用洲/城市方式表示时区时，会有夏令时问题
+ * 使用洲/城市方式表示时区时，会有夏令时问题,具体查看{DateTimeConverterTest}
  * <p>
  * 6、在数据库中存储时间戳时，尽量使用long型时间戳，它具有省空间，效率高，不依赖数据库的优点
  */
@@ -45,23 +45,35 @@ public class DateTimeConverter {
     public static final String YEAR_MONTH_DAY_TIME_FORMATTER = "yyyy-MM-dd HH:mm:ss";
     public static final String YEAR_MONTH_DAY_FORMATTER = "yyyy-MM-dd";
     /**
+     * 上海
+     */
+    public static final ZoneId ASIA_SHANGHAI = ZoneId.of("Asia/Shanghai");
+    /**
+     * 纽约
+     */
+    public static final ZoneId AMERICA_NEW_YORK = ZoneId.of("America/New_York");
+    /**
      * 东八区
      */
     public static final ZoneId DEFAULT_ZONE_ID = ZoneId.ofOffset("UTC", ZoneOffset.ofHours(8));
+    /**
+     * 西5区
+     */
+    public static final ZoneId UTC_MINUS_5 = ZoneId.ofOffset("UTC", ZoneOffset.ofHours(-5));
     /**
      * 格林威治标准时区
      */
     public static final ZoneId UTC_ZONE_ID = ZoneId.of("UTC");
 
     /**
-     * 已P....T...形式表示P...T之间表示日期间隔，T后面表示时间间隔，如果是PT...格式仅有时间间隔
+     * 以P....T...形式表示P...T之间表示日期间隔，T后面表示时间间隔，如果是PT...格式仅有时间间隔
      */
     public static Duration duration(LocalDateTime start, LocalDateTime end) {
         return Duration.between(start, end);
     }
 
     /**
-     * 已P....T...形式表示P...T之间表示日期间隔，T后面表示时间间隔，如果是PT...格式仅有时间间隔
+     * 以P....T...形式表示P...T之间表示日期间隔，T后面表示时间间隔，如果是PT...格式仅有时间间隔
      */
     public static Period period(LocalDate start, LocalDate end) {
         return Period.between(start, end);
@@ -70,7 +82,6 @@ public class DateTimeConverter {
     public static LocalDateTime parseToLocalDateTime(String time, String formatPattern) {
         return LocalDateTime.parse(time, DateTimeFormatter.ofPattern(formatPattern));
     }
-
 
     public static LocalDate parseToLocalDate(String time, String formatPattern) {
         return LocalDate.parse(time, DateTimeFormatter.ofPattern(formatPattern));
@@ -82,12 +93,16 @@ public class DateTimeConverter {
                 .format(DateTimeFormatter.ofPattern(formatPattern));
     }
 
-    public static String format(LocalDateTime localDateTime, ZoneId zoneId, String formatPattern) {
-        return localDateTime.atZone(zoneId)
-                .toLocalDateTime()
+    public static String format(LocalDateTime localDateTime, String formatPattern) {
+        return localDateTime
                 .format(DateTimeFormatter.ofPattern(formatPattern));
     }
 
+    /**
+     * ZoneId是java8推出的时区api
+     * TimeZone是java8之前的时区api
+     * 两者可以互相转换
+     */
     public static ZoneId toZoneId(TimeZone timeZone) {
         return timeZone.toZoneId();
     }
@@ -97,7 +112,6 @@ public class DateTimeConverter {
     }
 
     /**
-     * 时区：北京时间
      * 当前时间
      */
     public static ZonedDateTime now(ZoneId zoneId) {
@@ -122,11 +136,10 @@ public class DateTimeConverter {
     }
 
     public static Calendar convert(ZonedDateTime zonedDateTime) {
-        long milli = zonedDateTime.toInstant().toEpochMilli();
         Calendar calendar = Calendar.getInstance();
         calendar.clear();
         calendar.setTimeZone(TimeZone.getTimeZone(zonedDateTime.getZone().getId()));
-        calendar.setTimeInMillis(milli);
+        calendar.setTimeInMillis(zonedDateTime.toInstant().toEpochMilli());
         return calendar;
     }
 
