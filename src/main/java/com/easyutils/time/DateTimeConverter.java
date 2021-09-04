@@ -1,5 +1,6 @@
 package com.easyutils.time;
 
+import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -54,16 +55,20 @@ public class DateTimeConverter {
     public static final ZoneId AMERICA_NEW_YORK = ZoneId.of("America/New_York");
     /**
      * 东八区
+     * 由于TimeZone不识别UTC+08:00这样的格式，TimeZone.getTimeZone(ZoneId.of(UTC+08:00)) 转换不了，也不报错，直接使用GMT+0时区(格林威治时间)
      */
-    public static final ZoneId DEFAULT_ZONE_ID = ZoneId.ofOffset("UTC", ZoneOffset.ofHours(8));
+    public static final ZoneId DEFAULT_ZONE_ID = ZoneId.of("Etc/GMT-8");
+    public static final TimeZone DEFAULT_TIME_ZONE = TimeZone.getTimeZone("Etc/GMT-8");
     /**
      * 西5区
      */
-    public static final ZoneId UTC_MINUS_5 = ZoneId.ofOffset("UTC", ZoneOffset.ofHours(-5));
+    public static final ZoneId GMT_MINUS_5 = ZoneId.of("Etc/GMT+5");
+    public static final TimeZone GMT_MINUS_5_TIME_ZONE = TimeZone.getTimeZone("Etc/GMT+5");
     /**
      * 格林威治标准时区
      */
-    public static final ZoneId UTC_ZONE_ID = ZoneId.of("UTC");
+    public static final ZoneId GMT_ZONE_ID = ZoneId.of("Etc/GMT+0");
+    public static final TimeZone GMT_TIME_ZONE = TimeZone.getTimeZone("Etc/GMT+0");
 
     /**
      * 以P....T...形式表示P...T之间表示日期间隔，T后面表示时间间隔，如果是PT...格式仅有时间间隔
@@ -91,6 +96,12 @@ public class DateTimeConverter {
         return ZonedDateTime.ofInstant(date.toInstant(), timeZone.toZoneId())
                 .toLocalDateTime()
                 .format(DateTimeFormatter.ofPattern(formatPattern));
+    }
+
+    public static String format2(Date date, TimeZone timeZone, String formatPattern) {
+        SimpleDateFormat sdf = new SimpleDateFormat(formatPattern);
+        sdf.setTimeZone(timeZone);
+        return sdf.format(date);
     }
 
     public static String format(LocalDateTime localDateTime, String formatPattern) {

@@ -1,9 +1,10 @@
 package com.easyutils;
 
 import com.easyutils.time.DateTimeConverter;
+import org.junit.jupiter.api.Test;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import org.junit.jupiter.api.Test;
 
 public class DateTimeConverterTest {
 
@@ -19,7 +20,7 @@ public class DateTimeConverterTest {
     String format = DateTimeConverter.YEAR_MONTH_DAY_TIME_FORMATTER;
     ZoneId defaultZoneId = DateTimeConverter.DEFAULT_ZONE_ID;
     ZoneId americaNewYork = DateTimeConverter.AMERICA_NEW_YORK;
-    ZoneId utcMinus5 = DateTimeConverter.UTC_MINUS_5;
+    ZoneId utcMinus5 = DateTimeConverter.GMT_MINUS_5;
 
     // 北京时间  2019-11-15 13:00:00 (这个时间纽约没有使用夏令时)
     LocalDateTime beijing = DateTimeConverter
