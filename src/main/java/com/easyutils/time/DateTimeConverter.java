@@ -43,33 +43,6 @@ import java.util.TimeZone;
  */
 public class DateTimeConverter {
 
-    public static final String YEAR_MONTH_DAY_TIME_FORMATTER = "yyyy-MM-dd HH:mm:ss";
-    public static final String YEAR_MONTH_DAY_FORMATTER = "yyyy-MM-dd";
-    /**
-     * 上海
-     */
-    public static final ZoneId ASIA_SHANGHAI = ZoneId.of("Asia/Shanghai");
-    /**
-     * 纽约
-     */
-    public static final ZoneId AMERICA_NEW_YORK = ZoneId.of("America/New_York");
-    /**
-     * 东八区
-     * 由于TimeZone不识别UTC+08:00这样的格式，TimeZone.getTimeZone(ZoneId.of(UTC+08:00)) 转换不了，也不报错，直接使用GMT+0时区(格林威治时间)
-     */
-    public static final ZoneId DEFAULT_ZONE_ID = ZoneId.of("Etc/GMT-8");
-    public static final TimeZone DEFAULT_TIME_ZONE = TimeZone.getTimeZone("Etc/GMT-8");
-    /**
-     * 西5区
-     */
-    public static final ZoneId GMT_MINUS_5 = ZoneId.of("Etc/GMT+5");
-    public static final TimeZone GMT_MINUS_5_TIME_ZONE = TimeZone.getTimeZone("Etc/GMT+5");
-    /**
-     * 格林威治标准时区
-     */
-    public static final ZoneId GMT_ZONE_ID = ZoneId.of("Etc/GMT+0");
-    public static final TimeZone GMT_TIME_ZONE = TimeZone.getTimeZone("Etc/GMT+0");
-
     /**
      * 以P....T...形式表示P...T之间表示日期间隔，T后面表示时间间隔，如果是PT...格式仅有时间间隔
      */
@@ -105,8 +78,7 @@ public class DateTimeConverter {
     }
 
     public static String format(LocalDateTime localDateTime, String formatPattern) {
-        return localDateTime
-                .format(DateTimeFormatter.ofPattern(formatPattern));
+        return localDateTime.format(DateTimeFormatter.ofPattern(formatPattern));
     }
 
     /**
