@@ -160,6 +160,7 @@ public class HashedWheelTimer implements Timer {
             case WORKER_STATE_INIT:
                 if (WORKER_STATE_UPDATER.compareAndSet(this, WORKER_STATE_INIT, WORKER_STATE_STARTED)) {
                     workerThread.start();
+                    System.out.println("定时器启动");
                 }
                 break;
             case WORKER_STATE_STARTED:
@@ -243,7 +244,6 @@ public class HashedWheelTimer implements Timer {
     /**
      * 定时器任务
      */
-    @Slf4j
     private final class Worker implements Runnable {
 
         /**
